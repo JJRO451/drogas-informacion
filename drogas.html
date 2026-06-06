@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfoDrogas — Educación para la Salud</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #0e1117;
+      --surface:   #161c27;
+      --card:      #1c2333;
+      --border:    #2a3347;
+      --accent:    #4fc3f7;
+      --accent2:   #e040fb;
+      --warn:      #ff7043;
+      --green:     #66bb6a;
+      --text:      #e8eaf6;
+      --muted:     #8592a9;
+      --radius:    12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER / NAV ── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(14,17,23,.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: .9rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 900;
+      color: var(--accent);
+      letter-spacing: -.5px;
+    }
+    .logo span { color: var(--accent2); }
+    nav { display: flex; gap: 1.8rem; }
+    nav a {
+      color: var(--muted); text-decoration: none;
+      font-size: .9rem; font-weight: 400;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 88vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 5rem 6rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 80% 40%, rgba(79,195,247,.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 20% 70%, rgba(224,64,251,.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      font-size: .8rem; font-weight: 600; letter-spacing: 2px;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      border: 1px solid rgba(79,195,247,.3);
+      padding: .3rem .8rem; border-radius: 20px;
+      display: inline-block;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 900; line-height: 1.08;
+      max-width: 700px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em { color: var(--accent); font-style: normal; }
+    .hero p {
+      max-width: 540px; color: var(--muted);
+      font-size: 1.1rem; margin-bottom: 2.5rem;
+    }
+    .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-block; padding: .75rem 1.8rem;
+      border-radius: 8px; font-weight: 600; font-size: .95rem;
+      text-decoration: none; transition: transform .15s, box-shadow .15s;
+      cursor: pointer;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--accent); color: #0e1117;
+      box-shadow: 0 4px 20px rgba(79,195,247,.35);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 30px rgba(79,195,247,.5); }
+    .btn-secondary {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem; padding: 3rem 6rem;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem; font-weight: 900; color: var(--accent);
+    }
+    .stat-label { font-size: .85rem; color: var(--muted); margin-top: .2rem; }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 6rem; }
+    .section-label {
+      font-size: .75rem; font-weight: 600; letter-spacing: 3px;
+      color: var(--accent2); text-transform: uppercase; margin-bottom: .8rem;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700; margin-bottom: 1rem;
+    }
+    .section-intro { color: var(--muted); max-width: 620px; margin-bottom: 3rem; font-size: 1.05rem; }
+
+    /* ── CATEGORIES GRID ── */
+    #categorias { background: var(--surface); }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .cat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.8rem;
+      transition: border-color .2s, transform .2s;
+      cursor: default;
+    }
+    .cat-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .cat-icon { font-size: 2rem; margin-bottom: .9rem; }
+    .cat-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: .5rem; }
+    .cat-card p { font-size: .9rem; color: var(--muted); }
+    .cat-badge {
+      display: inline-block; margin-top: .8rem;
+      font-size: .72rem; font-weight: 600; letter-spacing: 1px;
+      padding: .2rem .7rem; border-radius: 20px; text-transform: uppercase;
+    }
+    .badge-legal   { background: rgba(102,187,106,.15); color: var(--green); border: 1px solid rgba(102,187,106,.3); }
+    .badge-ilegal  { background: rgba(255,112,67,.15);  color: var(--warn);  border: 1px solid rgba(255,112,67,.3); }
+    .badge-control { background: rgba(79,195,247,.15);  color: var(--accent); border: 1px solid rgba(79,195,247,.3); }
+
+    /* ── EFECTOS ── */
+    #efectos { background: var(--bg); }
+    .efecto-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .efecto-block {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 2rem;
+    }
+    .efecto-block h3 {
+      font-size: 1rem; font-weight: 600;
+      margin-bottom: 1rem; color: var(--accent);
+    }
+    .efecto-block ul { list-style: none; }
+    .efecto-block ul li {
+      padding: .45rem 0; font-size: .92rem; color: var(--muted);
+      border-bottom: 1px solid var(--border); display: flex; gap: .6rem; align-items: flex-start;
+    }
+    .efecto-block ul li:last-child { border-bottom: none; }
+    .efecto-block ul li::before { content: '›'; color: var(--accent2); font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ── PREVENCIÓN ── */
+    #prevencion { background: var(--surface); }
+    .prev-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .prev-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      text-align: center;
+    }
+    .prev-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem; font-weight: 900;
+      color: var(--accent2); opacity: .6;
+    }
+    .prev-card h3 { font-size: 1rem; font-weight: 600; margin: .5rem 0; }
+    .prev-card p { font-size: .88rem; color: var(--muted); }
+
+    /* ── AYUDA ── */
+    #ayuda { background: var(--bg); }
+    .ayuda-banner {
+      background: linear-gradient(135deg, rgba(79,195,247,.1), rgba(224,64,251,.08));
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 3rem; display: flex; gap: 3rem; align-items: center; flex-wrap: wrap;
+    }
+    .ayuda-banner h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700; margin-bottom: .5rem;
+    }
+    .ayuda-banner p { color: var(--muted); max-width: 420px; }
+    .hotlines { display: flex; flex-direction: column; gap: .8rem; flex-shrink: 0; }
+    .hotline {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: .8rem 1.2rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .hotline-icon { font-size: 1.4rem; }
+    .hotline-info { font-size: .85rem; }
+    .hotline-info strong { display: block; color: var(--text); }
+    .hotline-info span { color: var(--muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface); border-top: 1px solid var(--border);
+      padding: 3rem 6rem; display: flex; flex-wrap: wrap;
+      justify-content: space-between; gap: 2rem;
+    }
+    .footer-brand .logo { font-size: 1.2rem; }
+    .footer-brand p { color: var(--muted); font-size: .85rem; max-width: 260px; margin-top: .6rem; }
+    .footer-links h4 { font-size: .85rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: .9rem; }
+    .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: .9rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-bottom {
+      padding: 1.2rem 6rem; background: var(--bg); text-align: center;
+      font-size: .8rem; color: var(--muted); border-top: 1px solid var(--border);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero, section, .stats, footer { padding-left: 2rem; padding-right: 2rem; }
+      .hero { padding-top: 4rem; }
+      .efecto-grid { grid-template-columns: 1fr; }
+      .footer-bottom { padding-left: 2rem; padding-right: 2rem; }
+    }
+    @media (max-width: 600px) {
+      nav { gap: 1rem; }
+      nav a { font-size: .8rem; }
+      .ayuda-banner { flex-direction: column; }
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-tag { animation: fadeUp .6s ease both; }
+    .hero h1  { animation: fadeUp .6s .15s ease both; }
+    .hero p   { animation: fadeUp .6s .25s ease both; }
+    .btn-group { animation: fadeUp .6s .35s ease both; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <div class="logo">Info<span>Drogas</span></div>
+  <nav>
+    <a href="#categorias">Categorías</a>
+    <a href="#efectos">Efectos</a>
+    <a href="#prevencion">Prevención</a>
+    <a href="#ayuda">Pedir ayuda</a>
+  </nav>
+</header>
+
+<!-- ══════════════ HERO ══════════════ -->
+<main>
+  <section class="hero" id="inicio">
+    <div class="hero-tag">Educación para la Salud</div>
+    <h1>Conoce las drogas<br />para tomar mejores<br /><em>decisiones</em></h1>
+    <p>Información objetiva, científica y sin tabúes sobre sustancias psicoactivas: qué son, cómo afectan al cuerpo y la mente, y cómo prevenir el consumo de riesgo.</p>
+    <div class="btn-group">
+      <a href="#categorias" class="btn btn-primary">Explorar categorías</a>
+      <a href="#ayuda" class="btn btn-secondary">Necesito ayuda</a>
+    </div>
+  </section>
+
+  <!-- ══════════ STATS ══════════ -->
+  <div class="stats">
+    <div class="stat"><div class="stat-num">+270M</div><div class="stat-label">personas consumen drogas en el mundo (UNODC 2023)</div></div>
+    <div class="stat"><div class="stat-num">35M</div><div class="stat-label">tienen un trastorno por consumo de sustancias</div></div>
+    <div class="stat"><div class="stat-num">1 de 7</div><div class="stat-label">usuarios recibe tratamiento adecuado</div></div>
+    <div class="stat"><div class="stat-num">+500K</div><div class="stat-label">muertes anuales relacionadas con drogas</div></div>
+  </div>
+
+  <!-- ══════════ CATEGORÍAS ══════════ -->
+  <section id="categorias">
+    <div class="section-label">Tipos de sustancias</div>
+    <h2>Categorías de drogas</h2>
+    <p class="section-intro">Las drogas se clasifican según su efecto sobre el sistema nervioso central, su origen y su estatus legal.</p>
+    <div class="cat-grid">
+      <div class="cat-card">
+        <div class="cat-icon">🍺</div>
+        <h3>Depresoras del SNC</h3>
+        <p>Reducen la actividad del sistema nervioso. Incluyen alcohol, benzodiacepinas, opiáceos y barbitúricos. Producen sedación, relajación y, en dosis altas, pérdida de consciencia.</p>
+        <span class="cat-badge badge-legal">Algunas legales</span>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">⚡</div>
+        <h3>Estimulantes</h3>
+        <p>Aceleran el funcionamiento del sistema nervioso. Cocaína, anfetaminas, cafeína y nicotina son ejemplos. Aumentan la energía, la alerta y la frecuencia cardíaca.</p>
+        <span class="cat-badge badge-ilegal">Mayoría ilegales</span>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🌀</div>
+        <h3>Alucinógenas</h3>
+        <p>Alteran la percepción sensorial y el estado de conciencia. LSD, psilocibina (hongos), mescalina y DMT. Pueden provocar experiencias visuales y auditivas intensas.</p>
+        <span class="cat-badge badge-ilegal">Ilegales</span>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🌿</div>
+        <h3>Cannabis</h3>
+        <p>La marihuana actúa como depresora, estimulante y alucinógena según la dosis. El THC es su principal compuesto psicoactivo. Su estatus legal varía por país.</p>
+        <span class="cat-badge badge-control">Regulación variable</span>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">💊</div>
+        <h3>Opiáceos y opioides</h3>
+        <p>Derivados del opio o sintéticos. Morfina, heroína, codeína, fentanilo. Tienen alto poder analgésico pero también un elevado potencial adictivo y riesgo de sobredosis.</p>
+        <span class="cat-badge badge-control">Uso médico controlado</span>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🧪</div>
+        <h3>Drogas de síntesis (NPS)</h3>
+        <p>Nuevas sustancias psicoactivas diseñadas para imitar otras drogas. Éxtasis (MDMA), metanfetaminas y "designer drugs". Riesgo elevado por composición incierta.</p>
+        <span class="cat-badge badge-ilegal">Ilegales</span>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🚬</div>
+        <h3>Nicotina y tabaco</h3>
+        <p>Estimulante legal con alta capacidad adictiva. Afecta el sistema cardiovascular y respiratorio. Responsable de millones de muertes anuales prevenibles.</p>
+        <span class="cat-badge badge-legal">Legal (regulada)</span>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🏭</div>
+        <h3>Inhalantes</h3>
+        <p>Sustancias volátiles (pegamento, disolventes, gases). Frecuentes en contextos de vulnerabilidad. Pueden causar daño neurológico severo o muerte súbita incluso en el primer uso.</p>
+        <span class="cat-badge badge-ilegal">Abuso ilegal</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ EFECTOS ══════════ -->
+  <section id="efectos">
+    <div class="section-label">Lo que hacen al cuerpo</div>
+    <h2>Efectos en la salud</h2>
+    <p class="section-intro">El consumo de drogas afecta múltiples sistemas del organismo. Los efectos dependen de la sustancia, dosis, frecuencia y características individuales.</p>
+    <div class="efecto-grid">
+      <div class="efecto-block">
+        <h3>🧠 Efectos neurológicos</h3>
+        <ul>
+          <li>Alteración de neurotransmisores (dopamina, serotonina)</li>
+          <li>Deterioro de la memoria y capacidad de aprendizaje</li>
+          <li>Desarrollo de tolerancia y dependencia</li>
+          <li>Riesgo de psicosis y trastornos mentales</li>
+          <li>Cambios estructurales en el cerebro con consumo crónico</li>
+        </ul>
+      </div>
+      <div class="efecto-block">
+        <h3>❤️ Efectos cardiovasculares</h3>
+        <ul>
+          <li>Aumento o disminución de la presión arterial</li>
+          <li>Taquicardia o arritmias cardíacas</li>
+          <li>Mayor riesgo de infarto e ictus</li>
+          <li>Daño en válvulas cardíacas (en uso de drogas IV)</li>
+          <li>Vasoconstricción y reducción del flujo sanguíneo</li>
+        </ul>
+      </div>
+      <div class="efecto-block">
+        <h3>🫁 Efectos respiratorios</h3>
+        <ul>
+          <li>Irritación y daño de las vías respiratorias</li>
+          <li>Riesgo de bronquitis crónica y EPOC</li>
+          <li>Depresión respiratoria en sobredosis de opioides</li>
+          <li>Aumento del riesgo de infecciones pulmonares</li>
+          <li>Perforación del tabique nasal (cocaína inhalada)</li>
+        </ul>
+      </div>
+      <div class="efecto-block">
+        <h3>⚠️ Consecuencias sociales</h3>
+        <ul>
+          <li>Deterioro de las relaciones familiares y sociales</li>
+          <li>Abandono escolar o laboral</li>
+          <li>Problemas económicos y legales</li>
+          <li>Mayor exposición a situaciones de riesgo</li>
+          <li>Estigma y aislamiento social</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ PREVENCIÓN ══════════ -->
+  <section id="prevencion">
+    <div class="section-label">Cómo protegerte</div>
+    <h2>Prevención del consumo</h2>
+    <p class="section-intro">La prevención es la herramienta más eficaz. Conocer los riesgos y construir factores protectores marca la diferencia.</p>
+    <div class="prev-grid">
+      <div class="prev-card">
+        <div class="prev-num">01</div>
+        <h3>Educación e información</h3>
+        <p>Conocer cómo actúan las drogas reduce la curiosidad peligrosa y desmitifica creencias falsas.</p>
+      </div>
+      <div class="prev-card">
+        <div class="prev-num">02</div>
+        <h3>Red de apoyo social</h3>
+        <p>Las relaciones familiares y de amistad sólidas son un factor protector clave ante el consumo.</p>
+      </div>
+      <div class="prev-card">
+        <div class="prev-num">03</div>
+        <h3>Habilidades para decir no</h3>
+        <p>Practicar la asertividad y saber rechazar la presión de grupo reduce el riesgo de inicio.</p>
+      </div>
+      <div class="prev-card">
+        <div class="prev-num">04</div>
+        <h3>Actividades de bienestar</h3>
+        <p>El deporte, el arte y el voluntariado generan bienestar y ocupan el tiempo de manera saludable.</p>
+      </div>
+      <div class="prev-card">
+        <div class="prev-num">05</div>
+        <h3>Salud mental</h3>
+        <p>Atender la ansiedad, depresión u otros problemas psicológicos es esencial para reducir el uso como "automedicación".</p>
+      </div>
+      <div class="prev-card">
+        <div class="prev-num">06</div>
+        <h3>Detección temprana</h3>
+        <p>Reconocer las señales de un consumo problemático en etapas iniciales facilita una intervención oportuna.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ AYUDA ══════════ -->
+  <section id="ayuda">
+    <div class="section-label">No estás solo/a</div>
+    <h2>Pedir ayuda es el primer paso</h2>
+    <div class="ayuda-banner">
+      <div>
+        <h3>¿Tú o alguien que conoces necesita apoyo?</h3>
+        <p>La adicción es una enfermedad tratable. Existen líneas de ayuda gratuitas y centros especializados que brindan orientación confidencial sin importar la sustancia ni la situación.</p>
+        <br />
+        <p style="color: var(--muted); font-size:.85rem;">⚠️ Si hay riesgo inmediato de sobredosis, llama a emergencias (911 en México).</p>
+      </div>
+      <div class="hotlines">
+        <div class="hotline">
+          <div class="hotline-icon">📞</div>
+          <div class="hotline-info">
+            <strong>CONADIC — México</strong>
+            <span>800 911 2000 (gratuito, 24/7)</span>
+          </div>
+        </div>
+        <div class="hotline">
+          <div class="hotline-icon">💬</div>
+          <div class="hotline-info">
+            <strong>CIJ — Centros de Integración Juvenil</strong>
+            <span>800 290 0024</span>
+          </div>
+        </div>
+        <div class="hotline">
+          <div class="hotline-icon">🌐</div>
+          <div class="hotline-info">
+            <strong>UNODC — Recursos globales</strong>
+            <span>unodc.org/es</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-brand">
+    <div class="logo">Info<span>Drogas</span></div>
+    <p>Información educativa sobre sustancias psicoactivas con enfoque en salud pública y prevención.</p>
+  </div>
+  <div class="footer-links">
+    <h4>Contenido</h4>
+    <ul>
+      <li><a href="#categorias">Categorías</a></li>
+      <li><a href="#efectos">Efectos en la salud</a></li>
+      <li><a href="#prevencion">Prevención</a></li>
+      <li><a href="#ayuda">Pedir ayuda</a></li>
+    </ul>
+  </div>
+  <div class="footer-links">
+    <h4>Referencias</h4>
+    <ul>
+      <li><a href="https://www.unodc.org" target="_blank">UNODC</a></li>
+      <li><a href="https://www.who.int/es" target="_blank">OMS / WHO</a></li>
+      <li><a href="https://www.gob.mx/salud/conadic" target="_blank">CONADIC México</a></li>
+      <li><a href="https://www.cij.gob.mx" target="_blank">CIJ</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  © 2026 InfoDrogas · Página con fines educativos · El contenido no sustituye atención médica profesional.
+</div>
+
+</body>
+</html>
